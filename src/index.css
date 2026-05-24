@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply min-h-screen bg-surface text-white;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168, 85, 247, 0.15), transparent);
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply border border-white/10 bg-white/5 backdrop-blur-md;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent;
+  }
+}
