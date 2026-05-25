@@ -31,8 +31,9 @@ export function LoginPage() {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4">
-      <Card className="space-y-5">
+    <div className="auth-shell">
+      <div className="w-full max-w-md">
+        <Card className="space-y-5">
         <div className="text-center">
           <h1 className="font-display text-2xl font-bold text-gradient">Entrar</h1>
           <p className="mt-1 text-sm text-white/60">Bem-vindo de volta ao StickerVerse</p>
@@ -68,6 +69,7 @@ export function LoginPage() {
           </Link>
         </p>
       </Card>
+      </div>
     </div>
   );
 }

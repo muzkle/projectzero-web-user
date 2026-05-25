@@ -11,44 +11,42 @@ export function HomePage() {
   const { isAuthenticated, user } = useAuth();
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-2xl bg-gradient-to-br from-accent/20 via-surface-elevated to-surface-card p-5">
-        <p className="text-sm text-accent-light">Coleção digital</p>
-        <h2 className="font-display mt-1 text-2xl font-bold">
+    <div className="flex w-full flex-col gap-8 lg:gap-10">
+      <section className="rounded-3xl bg-gradient-to-br from-accent/25 via-surface-elevated to-surface-card p-6 text-center sm:p-8 lg:p-10">
+        <p className="text-sm font-medium text-accent-light">Coleção digital</p>
+        <h2 className="font-display mx-auto mt-2 max-w-2xl text-3xl font-bold sm:text-4xl lg:text-5xl">
           {isAuthenticated ? `E aí, ${user?.displayName?.split(' ')[0]}! 👋` : 'Desbloqueie figurinhas épicas'}
         </h2>
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mx-auto mt-3 max-w-xl text-sm text-white/60 sm:text-base">
           Complete missões, conecte Spotify e Steam, e monte seu álbum dos sonhos.
         </p>
         {!isAuthenticated && (
-          <div className="mt-4 flex gap-2">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link to="/register">
-              <Button size="sm">Criar conta</Button>
+              <Button>Criar conta</Button>
             </Link>
             <Link to="/login">
-              <Button size="sm" variant="secondary">
-                Entrar
-              </Button>
+              <Button variant="secondary">Entrar</Button>
             </Link>
           </div>
         )}
       </section>
 
-      <section>
-        <h3 className="font-display mb-3 text-lg font-semibold">Álbuns disponíveis</h3>
-        {isLoading && <Spinner className="py-12" />}
+      <section className="w-full">
+        <h3 className="section-title mb-5 text-center sm:mb-6">Álbuns disponíveis</h3>
+        {isLoading && <Spinner className="py-16" />}
         {error && (
           <EmptyState
             icon="😵"
             title="Não foi possível carregar"
-            description="Verifique se o gateway está rodando em localhost:3000"
+            description="Verifique sua conexão e tente novamente."
           />
         )}
         {albums && albums.length === 0 && (
           <EmptyState title="Nenhum álbum ainda" description="Volte em breve — novos drops chegando!" />
         )}
         {albums && albums.length > 0 && (
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {albums.map((album) => (
               <AlbumCard key={album.id} album={album} />
             ))}

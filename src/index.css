@@ -1,15 +1,38 @@
+@import '@muzkle/ui/src/styles.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html,
   body {
-    @apply min-h-screen bg-surface text-white;
-    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168, 85, 247, 0.15), transparent);
+    @apply min-h-full w-full bg-surface text-white;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse 100% 80% at 50% -30%, rgba(168, 85, 247, 0.18), transparent),
+      radial-gradient(ellipse 60% 50% at 100% 50%, rgba(126, 34, 206, 0.08), transparent),
+      radial-gradient(ellipse 60% 50% at 0% 80%, rgba(192, 132, 252, 0.06), transparent);
   }
 
   #root {
-    @apply min-h-screen;
+    @apply min-h-full w-full;
+  }
+}
+
+@layer components {
+  .page-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .auth-shell {
+    @apply flex min-h-screen w-full items-center justify-center px-4 py-10;
+  }
+
+  .section-title {
+    @apply font-display text-lg font-semibold sm:text-xl;
   }
 }
 

@@ -21,9 +21,9 @@ export function WishlistPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="font-display text-xl font-bold">Wishlist</h2>
-      <div className="grid grid-cols-2 gap-3">
+    <div className="mx-auto w-full max-w-6xl space-y-5">
+      <h2 className="section-title text-center sm:text-left">Wishlist</h2>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {wishlist.map((item) => (
           <div key={item.stickerId} className="space-y-2">
             <StickerCard

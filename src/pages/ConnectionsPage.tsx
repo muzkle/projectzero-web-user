@@ -47,10 +47,10 @@ export function ConnectionsPage() {
   const steamConnected = connections?.some((c) => c.provider === 'steam');
 
   return (
-    <div className="space-y-5">
-      <div>
-        <h2 className="font-display text-xl font-bold">Conexões</h2>
-        <p className="mt-1 text-sm text-white/60">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
+      <div className="text-center">
+        <h2 className="section-title">Conexões</h2>
+        <p className="mt-2 text-sm text-white/60">
           Conecte suas contas para completar missões de Spotify e Steam.
         </p>
       </div>

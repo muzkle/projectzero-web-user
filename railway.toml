@@ -3,6 +3,11 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
+numReplicas = 1
 healthcheckPath = "/"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
+
+[deploy.limitOverride.containers]
+cpu = 0.25
+memoryBytes = 268435456

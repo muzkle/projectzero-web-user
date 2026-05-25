@@ -10,6 +10,8 @@ import { WishlistPage } from '@/pages/WishlistPage';
 import { ConnectionsPage } from '@/pages/ConnectionsPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
+import { SearchResultsPage } from '@/pages/SearchResultsPage';
+import { SettingsPage } from '@/pages/SettingsPage';
 
 export const router = createBrowserRouter([
   {
@@ -19,12 +21,14 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'albums/:idOrSlug', element: <AlbumDetailPage /> },
       { path: 'stickers/:id', element: <StickerDetailPage /> },
+      { path: 'search', element: <SearchResultsPage /> },
       { path: 'connections', element: <ConnectionsPage /> },
       {
         element: <ProtectedRoute />,
         children: [
           { path: 'collection', element: <CollectionPage /> },
           { path: 'profile', element: <ProfilePage /> },
+          { path: 'settings', element: <SettingsPage /> },
           { path: 'wishlist', element: <WishlistPage /> },
         ],
       },

@@ -6,6 +6,7 @@ import { useClaimSticker, useSticker } from '@/features/stickers/useStickers';
 import { useAddToWishlist, useRemoveFromWishlist, useWishlist } from '@/features/wishlist/useWishlist';
 import { useValidateMission } from '@/features/missions/useMissions';
 import { useCreatePurchase } from '@/features/purchases/usePurchases';
+import { StickerPortrait } from '@muzkle/ui';
 import { Button } from '@/shared/ui/Button';
 import { Card } from '@/shared/ui/Card';
 import { Input } from '@/shared/ui/Input';
@@ -78,113 +79,129 @@ export function StickerDetailPage() {
   };
 
   return (
-    <div className="space-y-5">
-      <div
-        className={`overflow-hidden rounded-2xl border border-white/10 ${unlockAnim ? 'animate-unlock' : ''}`}
-      >
-        <img src={sticker.imageUrl} alt={sticker.name} className="aspect-square w-full object-cover" />
-      </div>
-
-      <div>
-        <div className="flex flex-wrap items-center gap-2">
-          <h2 className="font-display text-2xl font-bold">{sticker.name}</h2>
-          <RarityBadge rarity={sticker.rarity} />
-          {sticker.owned && <Badge variant="success">Na coleção</Badge>}
+    <div className="space-y-6 lg:space-y-0">
+      <div className="grid gap-8 lg:grid-cols-[minmax(280px,360px)_1fr] lg:items-start">
+        <div className={`mx-auto w-full max-w-sm ${unlockAnim ? 'animate-unlock' : ''}`}>
+          <StickerPortrait
+            name={sticker.name}
+            imageUrl={sticker.imageUrl}
+            rarity={sticker.rarity}
+            owned={sticker.owned}
+            size="lg"
+            showLabel={false}
+          />
         </div>
-        {sticker.description && <p className="mt-2 text-sm text-white/70">{sticker.description}</p>}
-        <p className="mt-2 text-sm text-white/50">
-          {sticker.supplyMinted}
-          {sticker.supplyTotal != null ? ` / ${sticker.supplyTotal}` : ''} minted
-        </p>
-      </div>
 
-      {!isAuthenticated && (
-        <Card>
-          <p className="text-sm text-white/70">
-            <Link to="/login" className="text-accent-light underline">
-              Faça login
-            </Link>{' '}
-            para resgatar, comprar ou adicionar à wishlist.
-          </p>
-        </Card>
-      )}
+        <div className="space-y-5">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="font-display text-2xl font-bold">{sticker.name}</h2>
+              <RarityBadge rarity={sticker.rarity} />
+              {sticker.owned && <Badge variant="success">Na coleção</Badge>}
+            </div>
+            {sticker.description && <p className="mt-2 text-sm text-white/70">{sticker.description}</p>}
+            <p className="mt-2 text-sm text-white/50">
+              {sticker.supplyMinted}
+              {sticker.supplyTotal != null ? ` / ${sticker.supplyTotal}` : ''} minted
+            </p>
+          </div>
 
-      {isAuthenticated && !sticker.owned && (
-        <div className="flex flex-col gap-2">
-          {isFree && sticker.eligible && (
-            <Button loading={claimMutation.isPending} onClick={handleClaim}>
-              Resgatar grátis ✨
-            </Button>
-          )}
-
-          {isFree && !sticker.eligible && (
+          {!isAuthenticated && (
             <Card>
               <p className="text-sm text-white/70">
-                Complete a missão ou conecte suas contas para desbloquear esta figurinha.
+                <Link to="/login" className="text-accent-light underline">
+                  Faça login
+                </Link>{' '}
+                para resgatar, comprar ou adicionar à wishlist.
               </p>
             </Card>
           )}
 
-          {isPaid && (
-            <Button loading={createPurchase.isPending} onClick={handlePurchase}>
-              Comprar {formatPrice(sticker.priceCents, sticker.currency)}
-            </Button>
-          )}
+          {isAuthenticated && !sticker.owned && (
+            <div className="flex flex-col gap-2">
+              {isFree && sticker.eligible && (
+                <Button loading={claimMutation.isPending} onClick={handleClaim}>
+                  Resgatar grátis ✨
+                </Button>
+              )}
 
-          <Button variant="secondary" loading={addWishlist.isPending || removeWishlist.isPending} onClick={handleWishlistToggle}>
-            {isWishlisted ? 'Remover da wishlist' : 'Adicionar à wishlist 💜'}
-          </Button>
-        </div>
-      )}
+              {isFree && !sticker.eligible && (
+                <Card>
+                  <p className="text-sm text-white/70">
+                    Complete a missão ou conecte suas contas para desbloquear esta figurinha.
+                  </p>
+                </Card>
+              )}
 
-      {purchaseMessage && (
-        <Card>
-          <p className="text-sm text-white/80">{purchaseMessage}</p>
-        </Card>
-      )}
+              {isPaid && (
+                <Button loading={createPurchase.isPending} onClick={handlePurchase}>
+                  Comprar {formatPrice(sticker.priceCents, sticker.currency)}
+                </Button>
+              )}
 
-      {isAuthenticated && sticker.mission && !sticker.owned && (
-        <Card>
-          <h3 className="font-display font-semibold">Missão</h3>
-          <p className="mt-1 text-xs uppercase tracking-wide text-accent-light">{sticker.mission.type.replace(/_/g, ' ')}</p>
-
-          {sticker.mission.type === 'manual_code' && (
-            <div className="mt-3 space-y-2">
-              <Input
-                label="Código secreto"
-                value={missionCode}
-                onChange={(e) => setMissionCode(e.target.value)}
-                placeholder="Digite o código"
-              />
+              <Button
+                variant="secondary"
+                loading={addWishlist.isPending || removeWishlist.isPending}
+                onClick={handleWishlistToggle}
+              >
+                {isWishlisted ? 'Remover da wishlist' : 'Adicionar à wishlist 💜'}
+              </Button>
             </div>
           )}
 
-          {(sticker.mission.type === 'spotify_track_plays' || sticker.mission.type === 'steam_achievement') && (
-            <p className="mt-2 text-sm text-white/60">
-              Conecte sua conta em{' '}
-              <Link to="/connections" className="text-accent-light underline">
-                Conexões
-              </Link>{' '}
-              e valide o progresso.
-            </p>
+          {purchaseMessage && (
+            <Card>
+              <p className="text-sm text-white/80">{purchaseMessage}</p>
+            </Card>
           )}
 
-          <Button
-            className="mt-3 w-full"
-            variant="secondary"
-            loading={validateMission.isPending}
-            onClick={handleValidateMission}
-          >
-            Validar missão
-          </Button>
+          {isAuthenticated && sticker.mission && !sticker.owned && (
+            <Card>
+              <h3 className="font-display font-semibold">Missão</h3>
+              <p className="mt-1 text-xs uppercase tracking-wide text-accent-light">
+                {sticker.mission.type.replace(/_/g, ' ')}
+              </p>
 
-          {validateMission.data && (
-            <p className="mt-2 text-sm text-emerald-400">
-              {validateMission.data.completed ? 'Missão concluída! 🎉' : 'Progresso atualizado.'}
-            </p>
+              {sticker.mission.type === 'manual_code' && (
+                <div className="mt-3 space-y-2">
+                  <Input
+                    label="Código secreto"
+                    value={missionCode}
+                    onChange={(e) => setMissionCode(e.target.value)}
+                    placeholder="Digite o código"
+                  />
+                </div>
+              )}
+
+              {(sticker.mission.type === 'spotify_track_plays' ||
+                sticker.mission.type === 'steam_achievement') && (
+                <p className="mt-2 text-sm text-white/60">
+                  Conecte sua conta em{' '}
+                  <Link to="/connections" className="text-accent-light underline">
+                    Conexões
+                  </Link>{' '}
+                  e valide o progresso.
+                </p>
+              )}
+
+              <Button
+                className="mt-3 w-full"
+                variant="secondary"
+                loading={validateMission.isPending}
+                onClick={handleValidateMission}
+              >
+                Validar missão
+              </Button>
+
+              {validateMission.data && (
+                <p className="mt-2 text-sm text-emerald-400">
+                  {validateMission.data.completed ? 'Missão concluída! 🎉' : 'Progresso atualizado.'}
+                </p>
+              )}
+            </Card>
           )}
-        </Card>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

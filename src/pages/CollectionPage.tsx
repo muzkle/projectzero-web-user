@@ -19,10 +19,12 @@ export function CollectionPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="font-display text-xl font-bold">Minha coleção</h2>
-      <p className="text-sm text-white/60">{collection.length} figurinhas</p>
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+    <div className="mx-auto w-full max-w-6xl space-y-5">
+      <div className="text-center sm:text-left">
+        <h2 className="font-display text-2xl font-bold">Minha coleção</h2>
+        <p className="mt-1 text-sm text-white/60">{collection.length} figurinhas</p>
+      </div>
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8">
         {collection.map((item) => (
           <StickerCard
             key={item.id}

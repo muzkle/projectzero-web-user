@@ -15,3 +15,11 @@ export function useAlbum(idOrSlug: string) {
     enabled: !!idOrSlug,
   });
 }
+
+export function useAlbumStickers(idOrSlug: string) {
+  return useQuery({
+    queryKey: ['albums', idOrSlug, 'stickers'],
+    queryFn: () => albumsApi.listStickers(idOrSlug),
+    enabled: !!idOrSlug,
+  });
+}

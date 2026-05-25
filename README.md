@@ -1,11 +1,14 @@
 # projectzero-web-user
 
-React + Vite + TypeScript web app for the ProjectZero collectible stickers platform (teen audience).
+React + Vite + TypeScript web app for the ProjectZero collectible stickers platform.
+
+**Layout:** desktop-first shell via [`@muzkle/ui`](https://github.com/muzkle/projectzero-ui) — sidebar colapsável, header com busca global, figurinhas retrato 3:4.
 
 ## Stack
 
 - React 18, TypeScript, Vite
-- Tailwind CSS (dark theme, purple accents)
+- `@muzkle/ui@0.1.0` (GitHub Packages)
+- Tailwind CSS (tema escuro premium)
 - React Router v6
 - TanStack Query
 - Axios (gateway API client with JWT refresh)
@@ -13,9 +16,26 @@ React + Vite + TypeScript web app for the ProjectZero collectible stickers platf
 ## Getting started
 
 ```bash
+cp .npmrc.example .npmrc
+# PAT com read:packages (mesmo NODE_AUTH_TOKEN do Railway)
+$env:NODE_AUTH_TOKEN = "ghp_xxxx"
+
 cp .env.example .env
 npm install
 npm run dev
+```
+
+**Sem PAT local:** instale o pacote a partir do tarball do monorepo:
+
+```bash
+npm install file:../projectzero-ui/muzkle-ui-0.1.0.tgz
+# ou: cd ../projectzero-ui && npm pack && cd ../projectzero-web-user && npm install ../projectzero-ui/muzkle-ui-0.1.0.tgz
+```
+
+Para atualizar `package-lock.json` com URL do GitHub Packages (opcional):
+
+```bash
+NODE_AUTH_TOKEN=ghp_xxx node scripts/add-ui-lock.cjs projectzero-web-user/package-lock.json
 ```
 
 App runs at [http://localhost:5173](http://localhost:5173). API gateway default: `http://localhost:3000/v1`.
@@ -25,64 +45,39 @@ App runs at [http://localhost:5173](http://localhost:5173). API gateway default:
 | Variable | Description |
 |----------|-------------|
 | `VITE_API_URL` | Gateway base URL (default `http://localhost:3000/v1`) |
-
-## Auth
-
-- **Access token** stored in memory
-- **Refresh token** in `localStorage` (`pz_refresh_token`)
-- Axios interceptor attaches Bearer token and refreshes on 401
+| `NODE_AUTH_TOKEN` | PAT GitHub com `read:packages` (build/install) |
 
 ## Pages
 
 | Route | Description |
 |-------|-------------|
 | `/` | Home — album list |
-| `/albums/:idOrSlug` | Album detail with progress grid |
-| `/stickers/:id` | Sticker detail — claim, purchase, missions |
+| `/albums/:idOrSlug` | Album detail — grid retrato |
+| `/stickers/:id` | Sticker detail — hero retrato + ações |
+| `/search?q=` | Resultados de busca global |
 | `/collection` | User collection (auth) |
 | `/profile` | Profile & stats (auth) |
+| `/settings` | Configurações da conta (auth) |
 | `/wishlist` | Wishlist (auth) |
 | `/connections` | Spotify / Steam OAuth |
 | `/login`, `/register` | Auth |
-
-## API integration
-
-Proxied via gateway:
-
-- `POST /auth/register`, `/auth/login`, `/auth/refresh`, `GET /auth/me`
-- `GET /albums`, `/albums/:id`
-- `GET /bff/stickers/:id` (catalog + ownership overlay)
-- `POST /stickers/:id/claim`, `GET /stickers/:id/eligibility`
-- `GET/POST/DELETE /me/wishlist`, `GET /me/collection`, `GET /me/profile`
-- `GET /connections`, Spotify/Steam authorize
-- `POST /missions/:id/validate`
-- `POST /purchases`, `GET /purchases/:id`
 
 ## Build & deploy
 
 ```bash
 npm run build
-npm run preview
 ```
 
-Docker (nginx static):
+Docker:
 
 ```bash
-docker build -t projectzero-web-user .
+docker build --build-arg NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN -t projectzero-web-user .
 ```
 
-Railway: uses `Dockerfile` + `railway.toml`.
+Railway — configure `NODE_AUTH_TOKEN` e `VITE_API_URL` no serviço:
 
-## Project structure
+```bash
+railway up projectzero-web-user --path-as-root --service web-user
+```
 
-```
-src/
-  app/          # providers, router
-  pages/        # route pages
-  features/     # domain hooks
-  shared/
-    api/        # axios client & API modules
-    ui/         # reusable components
-public/
-  manifest.json # PWA manifest
-```
+Ver [ADR-002](../docs/ADR/002-desktop-first-portrait-stickers.md).
